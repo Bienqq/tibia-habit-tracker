@@ -1,0 +1,11 @@
+/* Kolejność warstw CSS — Tailwind v4 + PrimeVue styled mode współistnieją.
+   Nasz `tibia.css` jest ładowany BEZ warstwy (po tym pliku),
+   więc nadpisuje style motywu PrimeVue bez walki o specyficzność. */
+@layer theme, base, primevue, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@import 'primeicons/primeicons.css';
+@import '@fontsource/press-start-2p/index.css';

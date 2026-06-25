@@ -1,0 +1,329 @@
+/* =========================================================================
+   Motyw Tibii — warstwa wizualna (bez warstwy @layer => nadpisuje PrimeVue).
+   Rzeźbione złoto-brązowe ramy okien, kamienne tła, beżowe przyciski z
+   fazowaniem, paski HP/EXP, pikselowy font — w stylu klienta gry Tibia.
+   ========================================================================= */
+
+:root {
+  /* Złoto-brązowa rama okien (carved frame) */
+  --tibia-frame-light: #e0c277;
+  --tibia-frame: #a9842f;
+  --tibia-frame-dark: #5c4517;
+
+  /* Kamień / brąz — tła */
+  --tibia-stone: #3b352c;
+  --tibia-stone-dark: #2a251e;
+  --tibia-stone-darker: #1f1b15;
+  --tibia-bg: #14110c;
+
+  /* Beżowe przyciski klienta Tibii */
+  --tibia-btn-light: #e3d4a8;
+  --tibia-btn: #b8a06d;
+  --tibia-btn-dark: #6e5c34;
+
+  --tibia-gold: #e0c277;
+  --tibia-gold-bright: #ffe9a8;
+
+  --tibia-text: #e8dcc0;
+  --tibia-text-muted: #a89876;
+
+  --tibia-hp: #b71c1c;
+  --tibia-mana: #1f4fb5;
+  --tibia-exp: #d4a017;
+
+  --tibia-radius: 2px;
+  --font-pixel: 'Press Start 2P', 'Courier New', monospace;
+}
+
+/* ----------------------------- Tło / typografia ------------------------- */
+
+html,
+body,
+#__nuxt {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--tibia-text);
+  font-family: 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+  background-color: var(--tibia-bg);
+  /* Ciemna kamienna tekstura: drobna siatka „cegieł" + winieta */
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(90, 76, 52, 0.18), transparent 55%),
+    radial-gradient(circle at 50% 120%, rgba(0, 0, 0, 0.7), transparent 60%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.25) 0,
+      rgba(0, 0, 0, 0.25) 1px,
+      transparent 1px,
+      transparent 16px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.22) 0,
+      rgba(0, 0, 0, 0.22) 1px,
+      transparent 1px,
+      transparent 24px
+    ),
+    linear-gradient(#26221b, #17140e);
+  background-attachment: fixed;
+}
+
+.pixel {
+  font-family: var(--font-pixel);
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+}
+
+.tibia-gold-text {
+  color: var(--tibia-gold);
+  text-shadow: 0 1px 0 #000, 0 0 5px rgba(224, 194, 119, 0.25);
+}
+
+/* --------------------- Rzeźbiona rama okien (carved) -------------------- */
+
+/* Wielowarstwowa złota rama — kluczowy element wyglądu klienta Tibii.
+   Kolejne pierścienie inset tworzą wrażenie kutej, fazowanej krawędzi. */
+.tibia-panel,
+.tibia-bevel {
+  position: relative;
+  background:
+    linear-gradient(var(--tibia-stone), var(--tibia-stone-dark));
+  border: 2px solid var(--tibia-frame-dark);
+  border-radius: var(--tibia-radius);
+  box-shadow:
+    inset 0 0 0 2px var(--tibia-frame),
+    inset 0 0 0 3px var(--tibia-frame-light),
+    inset 0 0 0 5px var(--tibia-frame-dark),
+    inset 3px 3px 8px rgba(0, 0, 0, 0.45),
+    0 0 0 1px #000,
+    0 10px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* Pasek tytułowy okna */
+.tibia-titlebar {
+  position: relative;
+  font-family: var(--font-pixel);
+  font-size: 0.66rem;
+  color: var(--tibia-gold);
+  text-shadow: 0 1px 0 #000;
+  background:
+    linear-gradient(#5a4d34, #36301f);
+  border-bottom: 2px solid var(--tibia-frame-dark);
+  box-shadow:
+    inset 0 1px 0 rgba(224, 194, 119, 0.35),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.4);
+  padding: 0.6rem 0.9rem;
+  margin: 4px 4px 0;
+  border-radius: var(--tibia-radius);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* --------------------------- Paski HP / EXP ----------------------------- */
+
+.tibia-bar {
+  position: relative;
+  height: 18px;
+  border: 2px solid #000;
+  border-radius: 2px;
+  background: #0c0a07;
+  box-shadow:
+    inset 0 2px 3px rgba(0, 0, 0, 0.9),
+    0 1px 0 rgba(224, 194, 119, 0.15);
+  overflow: hidden;
+}
+
+.tibia-bar__fill {
+  height: 100%;
+  transition: width 0.4s ease;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0) 45%,
+    rgba(0, 0, 0, 0.3)
+  );
+}
+
+.tibia-bar__fill--exp {
+  background-color: var(--tibia-exp);
+}
+.tibia-bar__fill--hp {
+  background-color: var(--tibia-hp);
+}
+.tibia-bar__fill--mana {
+  background-color: var(--tibia-mana);
+}
+
+.tibia-bar__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  color: #fff;
+  text-shadow: 1px 1px 0 #000, -1px 0 0 #000, 0 1px 0 #000, 1px 0 0 #000;
+}
+
+/* ---------------------- Nadpisania komponentów PrimeVue ------------------ */
+
+/* Beżowe przyciski klienta Tibii — fazowane, z ciemnym tekstem */
+.p-button {
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+  letter-spacing: 0.02em;
+  border-radius: var(--tibia-radius);
+  border: 2px solid #1c150a !important;
+  background: linear-gradient(var(--tibia-btn-light), var(--tibia-btn)) !important;
+  color: #2a1f0c !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  box-shadow:
+    inset 1px 1px 0 #f6eccf,
+    inset -1px -2px 0 var(--tibia-btn-dark),
+    0 3px 0 #3a2f14,
+    0 4px 6px rgba(0, 0, 0, 0.55);
+  transition: transform 0.05s ease, filter 0.1s ease;
+}
+.p-button:hover {
+  filter: brightness(1.08);
+}
+.p-button:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 1px 1px 0 #f6eccf,
+    inset -1px -1px 0 var(--tibia-btn-dark),
+    0 1px 0 #3a2f14;
+}
+
+/* Wariant drugorzędny — kamienny */
+.p-button.p-button-secondary {
+  background: linear-gradient(#6a5d49, #3a322b) !important;
+  color: var(--tibia-text) !important;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.18),
+    inset -1px -2px 0 rgba(0, 0, 0, 0.6),
+    0 3px 0 #1a1612,
+    0 4px 6px rgba(0, 0, 0, 0.55);
+}
+
+/* Wariant niebezpieczny — "death/reset" (Złamałem nawyk) */
+.p-button.p-button-danger {
+  background: linear-gradient(#d65a4a, #8e2a1d) !important;
+  color: #fff !important;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.3),
+    inset -1px -2px 0 rgba(0, 0, 0, 0.55),
+    0 3px 0 #4d160e,
+    0 4px 6px rgba(0, 0, 0, 0.55);
+}
+
+/* Okna: Card / Dialog / Panel — ta sama rzeźbiona rama co .tibia-panel */
+.p-card,
+.p-dialog,
+.p-panel {
+  background: linear-gradient(var(--tibia-stone), var(--tibia-stone-dark)) !important;
+  color: var(--tibia-text) !important;
+  border: 2px solid var(--tibia-frame-dark) !important;
+  border-radius: var(--tibia-radius) !important;
+  box-shadow:
+    inset 0 0 0 2px var(--tibia-frame),
+    inset 0 0 0 3px var(--tibia-frame-light),
+    inset 0 0 0 5px var(--tibia-frame-dark),
+    0 12px 28px rgba(0, 0, 0, 0.65) !important;
+}
+
+.p-dialog .p-dialog-header {
+  background: linear-gradient(#5a4d34, #36301f) !important;
+  border-bottom: 2px solid var(--tibia-frame-dark) !important;
+  color: var(--tibia-gold) !important;
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  margin: 4px 4px 0;
+  border-radius: var(--tibia-radius);
+  box-shadow: inset 0 1px 0 rgba(224, 194, 119, 0.3);
+}
+
+/* Pola formularzy — wgłębione, ciemne */
+.p-inputtext,
+.p-password-input,
+.p-autocomplete-input {
+  background: #100d09 !important;
+  border: 2px solid #000 !important;
+  border-radius: 2px !important;
+  color: var(--tibia-text) !important;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.8),
+    inset 0 0 0 1px rgba(224, 194, 119, 0.12) !important;
+}
+.p-inputtext:focus {
+  outline: none !important;
+  border-color: var(--tibia-frame) !important;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 0 2px rgba(224, 194, 119, 0.5) !important;
+}
+
+/* Tablica Highscores */
+.p-datatable {
+  border: 2px solid var(--tibia-frame-dark);
+  border-radius: var(--tibia-radius);
+  box-shadow: inset 0 0 0 1px var(--tibia-frame);
+  overflow: hidden;
+}
+.p-datatable .p-datatable-thead > tr > th {
+  background: linear-gradient(#5a4d34, #36301f) !important;
+  color: var(--tibia-gold) !important;
+  font-family: var(--font-pixel);
+  font-size: 0.56rem;
+  border-color: #000 !important;
+}
+.p-datatable .p-datatable-tbody > tr {
+  background: var(--tibia-stone) !important;
+  color: var(--tibia-text) !important;
+}
+.p-datatable .p-datatable-tbody > tr:nth-child(even) {
+  background: var(--tibia-stone-dark) !important;
+}
+
+/* Wiersz TOP 1 — złoty highlight */
+.highscore-top1 {
+  background: linear-gradient(
+    90deg,
+    rgba(224, 194, 119, 0.3),
+    rgba(224, 194, 119, 0.08)
+  ) !important;
+  box-shadow: inset 0 0 0 1px var(--tibia-gold);
+}
+
+/* Złota odznaka / "korona" TOP 1 */
+.tibia-crown {
+  color: var(--tibia-gold);
+  filter: drop-shadow(0 1px 0 #000);
+}
+
+/* Pasek przewijania w klimacie */
+*::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+*::-webkit-scrollbar-track {
+  background: var(--tibia-bg);
+  box-shadow: inset 0 0 4px #000;
+}
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--tibia-btn), var(--tibia-btn-dark));
+  border: 2px solid #000;
+  border-radius: 2px;
+}
+
+/* Fokus dostępności — złoty ring mimo retro stylu */
+:focus-visible {
+  outline: 2px solid var(--tibia-gold);
+  outline-offset: 2px;
+}
